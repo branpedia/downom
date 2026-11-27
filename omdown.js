@@ -379,6 +379,68 @@ async function fetchStreamBuffer(streamUrl) {
     };
 }
 
+/**
+ * Ambil media sebagai Buffer tanpa upload ke direct host.
+ * @param {string} targetUrl
+ * @param {string} [formatId] - id / quality format, atau 'all-slides'
+ * @returns {Promise<{ buffer: Buffer, contentType: string, filename: string }>}
+ */
+const _resolveCache = new Map();
+async function resolveCached(targetUrl) {
+    const hit = _resolveCache.get(targetUrl);
+    if (hit && Date.now() - hit.t < 5 * 60 * 1000) return hit.data;
+    const data = await resolve(targetUrl);
+    _resolveCache.set(targetUrl, { t: Date.now(), data });
+    if (_resolveCache.size > 100) _resolveCache.delete(_resolveCache.keys().next().value);
+    return data;
+}
+
+async function streamFile(targetUrl, formatId = '') {
+    _ck();
+    const media = await resolveCached(targetUrl);
+    const formats = Array.isArray(media.formats) ? media.formats : [];
+    const slides = Array.isArray(media.slides) ? media.slides : [];
+
+    if ((formatId === 'all-slides' || (!formats.length && slides.length)) && slides.length) {
+        const zip = new AdmZip();
+        let added = 0;
+        for (let i = 0; i < slides.length; i++) {
+            const s = slides[i];
+            const src = s.url || s.previewUrl;
+            if (!src) continue;
+            try {
+                const { buffer } = await fetchStreamBuffer(src);
+                const ext = s.type === 'video' ? 'mp4' : 'jpg';
+                zip.addFile(`slide_${String(i + 1).padStart(2, '0')}.${ext}`, buffer);
+                added++;
+            } catch (_) {}
+        }
+        if (!added) throw new Error('Failed to download any slides');
+        return {
+            buffer: zip.toBuffer(),
+            contentType: 'application/zip',
+            filename: sanitizeFilename(media.title || 'omdown_slides', 'zip')
+        };
+    }
+
+    const realFormats = formats.filter(
+        (f) => f.downloadUrl && f.downloadUrl !== 'all-slides' && f.downloadUrl !== 'all-playlist'
+    );
+    if (!realFormats.length) throw new Error('No downloadable formats found');
+
+    const chosen = formatId
+        ? realFormats.find((f) => f.id === formatId || f.quality === formatId)
+        : realFormats[0];
+    if (!chosen) throw new Error(`Format "${formatId}" not found`);
+
+    const { buffer, contentType } = await fetchStreamBuffer(chosen.downloadUrl);
+    return {
+        buffer,
+        contentType,
+        filename: sanitizeFilename(media.title || chosen.id, chosen.ext || 'mp4')
+    };
+}
+
 async function download(targetUrl, formatId = '', outPath = '') {
     _ck();
     const media = await resolve(targetUrl);
@@ -444,6 +506,7 @@ function printUsage() {
         'Usage:',
         ' node omdown.js resolve <url>',
         ' node omdown.js download <url> [formatId] [outFile]',
+        ' node omdown.js stream <url> [formatId] [outFile]',
         ' node omdown.js stats',
         ' node omdown.js platforms'
     ].join('\n'));
@@ -469,6 +532,12 @@ async function main() {
         } else if (cmd === 'download' || cmd === 'dl') {
             if (!arg1) { printUsage(); return; }
             result = await download(arg1, arg2 || '', arg3 || '');
+        } else if (cmd === 'stream') {
+            if (!arg1) { printUsage(); return; }
+            const { buffer, contentType, filename } = await streamFile(arg1, arg2 || '');
+            const out = arg3 || filename;
+            fs.writeFileSync(out, buffer);
+            result = { filename: out, size: buffer.length, contentType };
         } else {
             printUsage();
             return;
@@ -497,7 +566,9 @@ module.exports = {
     getStats,
     listPlatforms,
     resolve,
-    download
+    resolveCached,
+    download,
+    streamFile
 };
 
 if (require.main === module) {
