@@ -1,0 +1,240 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Unduhin</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Inter:wght@400;500;600&display=swap">
+<style>
+:root{--ink:#0E1116;--accent:#6C47FF;--mint:#5CF2C2}
+body{margin:0}
+a{color:inherit;text-decoration:none}a:hover{text-decoration:underline}
+.h{font-family:'Space Grotesk',sans-serif;font-weight:700;letter-spacing:-.025em;margin:0}
+.btn{display:inline-flex;align-items:center;justify-content:center;min-height:52px;padding:0 28px;border-radius:14px;font-weight:600;font-size:16px;box-sizing:border-box;border:0;cursor:pointer;font-family:inherit;transition:transform .12s ease,opacity .12s ease}
+.btn:disabled{opacity:.6;cursor:not-allowed}
+.btn:not(:disabled):active{transform:scale(.98)}
+.px{padding-left:clamp(20px,5vw,64px);padding-right:clamp(20px,5vw,64px)}
+.card{border-radius:24px;padding:28px;display:flex;flex-direction:column;gap:12px;box-sizing:border-box}
+.chip{padding:8px 16px;border-radius:999px;border:1px solid #2E3340;font-size:14px;font-weight:500;color:#D5D8E2}
+.ico{width:48px;height:48px;border-radius:14px;display:flex;align-items:center;justify-content:center}
+details{border-top:1px solid #2E3340;padding:22px 0}
+summary{cursor:pointer;font-weight:600;font-size:18px;list-style:none;display:flex;justify-content:space-between;gap:16px;min-height:44px;align-items:center}
+summary::-webkit-details-marker{display:none}
+html{background:var(--ink)}
+</style>
+</head>
+<body>
+<div style="width:100%;max-width:1440px;margin:0 auto;background:var(--ink);color:#F3F4F8;font-family:Inter,sans-serif;display:flex;flex-direction:column;overflow:hidden">
+
+<header class="px" style="display:flex;flex-wrap:wrap;gap:16px;align-items:center;justify-content:space-between;padding-top:24px;padding-bottom:24px">
+<a href="#" style="display:flex;align-items:center;gap:12px"><span class="ico" style="width:40px;height:40px;background:var(--accent);border-radius:12px"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v11M7 11l5 5 5-5M5 20h14"/></svg></span><span class="h" style="font-size:24px">Unduhin</span></a>
+<nav style="display:flex;flex-wrap:wrap;gap:32px;font-size:15px;font-weight:500;color:#C3C7D4"><a href="#fitur">Fitur</a><a href="#cara">Cara pakai</a><a href="#faq">Bantuan</a></nav>
+<a href="#mulai" class="btn" style="min-height:44px;padding:0 22px;font-size:15px;background:#F3F4F8;color:var(--ink)">Mulai</a>
+</header>
+
+<section id="mulai" class="px" style="display:flex;flex-wrap:wrap;gap:56px;align-items:flex-start;padding-top:40px;padding-bottom:96px">
+<div style="flex:1 1 440px;display:flex;flex-direction:column;gap:28px">
+<span style="align-self:flex-start;background:#1B1F2A;border:1px solid #2E3340;padding:8px 16px;border-radius:999px;font-size:14px;font-weight:500;color:var(--mint)">● Gratis · Tanpa instal</span>
+<h1 class="h" style="font-size:clamp(40px,6.4vw,84px);line-height:1">Simpan file dari tautan, <span style="color:var(--mint)">tanpa ribet.</span></h1>
+<p style="margin:0;font-size:clamp(16px,2vw,19px);line-height:1.65;max-width:520px;color:#C3C7D4">Tempel tautan, pilih format, lalu unduh. Berjalan di ponsel maupun komputer.</p>
+
+<div style="background:#171A23;border:1px solid #2E3340;border-radius:20px;padding:10px;display:flex;flex-wrap:wrap;gap:10px;max-width:600px">
+<label for="u" style="position:absolute;left:-9999px">Tautan</label>
+<input id="u" placeholder="Tempel tautan di sini" autocomplete="off" style="flex:1 1 220px;min-height:52px;box-sizing:border-box;padding:0 16px;border:0;background:transparent;color:#F3F4F8;font-size:16px;font-family:inherit;outline:none">
+<button id="checkBtn" class="btn" style="background:var(--accent);color:#fff;flex:1 1 auto">Cek tautan</button>
+</div>
+
+<div id="errorBox" style="display:none;background:#2a1620;border:1px solid #ff5757;color:#ffb1b1;padding:14px 18px;border-radius:14px;font-size:14px;max-width:600px;line-height:1.5"></div>
+<div id="resultBox" style="display:none;max-width:600px"></div>
+
+<div style="display:flex;flex-wrap:wrap;gap:10px"><span class="chip">MP4</span><span class="chip">MP3</span><span class="chip">JPG</span><span class="chip">PNG</span><span class="chip">ZIP</span></div>
+<span style="font-size:13px;color:#9AA0B2">Gunakan hanya untuk konten milik Anda atau yang berlisensi terbuka.</span>
+</div>
+
+<div style="flex:1 1 380px;display:flex;justify-content:center">
+<div style="position:relative;width:100%;max-width:460px;padding:24px 0 40px">
+<div style="background:#171A23;border:1px solid #2E3340;border-radius:24px;padding:20px;display:flex;flex-direction:column;gap:18px;box-shadow:10px 10px 0 var(--accent)">
+<div style="display:flex;gap:8px"><span style="width:10px;height:10px;border-radius:50%;background:#3A3F50"></span><span style="width:10px;height:10px;border-radius:50%;background:#3A3F50"></span><span style="width:10px;height:10px;border-radius:50%;background:#3A3F50"></span></div>
+<div style="aspect-ratio:16/9;background:#232838;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:12px;letter-spacing:.08em;color:#9AA0B2">[THUMBNAIL]</div>
+<div style="display:flex;flex-direction:column;gap:6px"><b style="font-size:17px">[JUDUL FILE]</b><span style="font-size:13px;color:#9AA0B2">MP4 · 720p · [UKURAN]</span></div>
+<div style="height:10px;border-radius:999px;background:#232838"><div style="width:72%;height:100%;border-radius:999px;background:var(--mint)"></div></div>
+<div style="display:flex;justify-content:space-between;font-size:13px;color:#C3C7D4"><span>Menyiapkan file</span><span>72%</span></div>
+</div>
+<span style="position:absolute;top:0;right:12px;background:var(--mint);color:var(--ink);padding:10px 16px;border-radius:999px;font-weight:600;font-size:14px">MP4 · 720p</span>
+<span style="position:absolute;bottom:0;left:12px;background:#F3F4F8;color:var(--ink);padding:10px 16px;border-radius:999px;font-weight:600;font-size:14px">✓ Siap diunduh</span>
+</div>
+</div>
+</section>
+
+<section id="fitur" class="px" style="padding-bottom:96px;display:flex;flex-direction:column;gap:32px">
+<h2 class="h" style="font-size:clamp(30px,4vw,48px)">Dibuat supaya terasa ringan</h2>
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px">
+<div class="card" style="background:var(--accent)"><span class="ico" style="background:rgba(255,255,255,.18)"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M13 3L5 14h6l-1 7 8-11h-6z"/></svg></span><b style="font-size:20px">Satu langkah</b><span style="line-height:1.6;color:#F0EEFF">Tempel tautan dan semuanya siap dalam hitungan detik.</span></div>
+<div class="card" style="background:#171A23;border:1px solid #2E3340"><span class="ico" style="background:var(--mint)"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#0E1116" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l9 5-9 5-9-5zM3 13l9 5 9-5"/></svg></span><b style="font-size:20px">Banyak format</b><span style="line-height:1.6;color:#C3C7D4">Video, audio, gambar, atau sekaligus dalam satu ZIP.</span></div>
+<div class="card" style="background:#171A23;border:1px solid #2E3340"><span class="ico" style="background:#F5C86B"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#0E1116" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="7" y="2" width="10" height="20" rx="2"/><path d="M11 18h2"/></svg></span><b style="font-size:20px">Ramah ponsel</b><span style="line-height:1.6;color:#C3C7D4">Tombol besar dan tata letak yang menyesuaikan layar.</span></div>
+<div class="card" style="background:#171A23;border:1px solid #2E3340"><span class="ico" style="background:#FF8FB1"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#0E1116" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z"/></svg></span><b style="font-size:20px">Tanpa daftar</b><span style="line-height:1.6;color:#C3C7D4">Langsung pakai, tanpa akun dan tanpa instal aplikasi.</span></div>
+</div>
+</section>
+
+<section id="cara" class="px" style="background:#F3F1EA;color:var(--ink);padding-top:88px;padding-bottom:88px;display:flex;flex-direction:column;gap:40px">
+<h2 class="h" style="font-size:clamp(30px,4vw,48px)">Tiga langkah, selesai.</h2>
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:24px">
+<div style="display:flex;flex-direction:column;gap:12px;border-top:4px solid var(--ink);padding-top:20px"><span class="h" style="font-size:64px;color:var(--accent)">01</span><b style="font-size:20px">Tempel tautan</b><span style="line-height:1.6;color:#4A4F5E">Salin alamat dari aplikasi atau browser, lalu tempel di kolom.</span></div>
+<div style="display:flex;flex-direction:column;gap:12px;border-top:4px solid var(--ink);padding-top:20px"><span class="h" style="font-size:64px;color:var(--accent)">02</span><b style="font-size:20px">Pilih format</b><span style="line-height:1.6;color:#4A4F5E">Tentukan jenis file dan kualitas yang tersedia.</span></div>
+<div style="display:flex;flex-direction:column;gap:12px;border-top:4px solid var(--ink);padding-top:20px"><span class="h" style="font-size:64px;color:var(--accent)">03</span><b style="font-size:20px">Unduh</b><span style="line-height:1.6;color:#4A4F5E">Tekan Unduh dan file langsung tersimpan di perangkat Anda.</span></div>
+</div>
+</section>
+
+<section id="faq" class="px" style="padding-top:88px;padding-bottom:88px;display:flex;flex-wrap:wrap;gap:48px">
+<h2 class="h" style="flex:1 1 280px;font-size:clamp(30px,4vw,48px)">Pertanyaan umum</h2>
+<div style="flex:2 1 420px;display:flex;flex-direction:column">
+<details open><summary>Format apa saja yang tersedia?<span aria-hidden="true" style="color:var(--mint)">+</span></summary><p style="margin:12px 0 0;line-height:1.65;color:#C3C7D4">MP4, MP3, JPG, dan ZIP (untuk slide foto). Format yang muncul tergantung platform sumber.</p></details>
+<details><summary>Apakah layanan ini gratis?<span aria-hidden="true" style="color:var(--mint)">+</span></summary><p style="margin:12px 0 0;line-height:1.65;color:#C3C7D4">Ya, sepenuhnya gratis tanpa batas wajar.</p></details>
+<details><summary>Konten apa yang boleh diunduh?<span aria-hidden="true" style="color:var(--mint)">+</span></summary><p style="margin:12px 0 0;line-height:1.65;color:#C3C7D4">Hanya konten milik Anda atau yang berlisensi terbuka.</p></details>
+<details style="border-bottom:1px solid #2E3340"><summary>Apakah ada batas ukuran file?<span aria-hidden="true" style="color:var(--mint)">+</span></summary><p style="margin:12px 0 0;line-height:1.65;color:#C3C7D4">Sangat besar tidak disarankan — server mem-buffer file sebelum dikirim ke browser.</p></details>
+</div>
+</section>
+
+<section class="px" style="padding-bottom:88px">
+<div style="background:var(--accent);border-radius:32px;padding:clamp(32px,6vw,72px);display:flex;flex-wrap:wrap;gap:32px;align-items:center;justify-content:space-between">
+<h2 class="h" style="flex:1 1 320px;font-size:clamp(30px,4.4vw,56px);line-height:1.05">Punya tautan? Coba sekarang.</h2>
+<a href="#mulai" class="btn" style="background:#fff;color:var(--ink);min-height:56px;padding:0 36px">Mulai unduh</a>
+</div>
+</section>
+
+<footer class="px" style="padding-top:32px;padding-bottom:32px;border-top:1px solid #2E3340;display:flex;flex-wrap:wrap;gap:20px;justify-content:space-between;font-size:14px;color:#9AA0B2">
+<span>© 2025 Unduhin</span>
+<span style="display:flex;flex-wrap:wrap;gap:24px"><a href="#">Bantuan</a><a href="#">Syarat &amp; Ketentuan</a><a href="#">Privasi</a></span>
+</footer>
+
+</div>
+
+<div id="toast" style="display:none;position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--mint);color:var(--ink);padding:14px 24px;border-radius:999px;font-weight:600;font-size:15px;z-index:999;box-shadow:0 8px 24px rgba(0,0,0,.4);max-width:calc(100vw - 32px);text-align:center"></div>
+
+<script>
+(function () {
+  'use strict';
+  var $ = function (id) { return document.getElementById(id); };
+  var esc = function (s) {
+    return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) {
+      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+    });
+  };
+  var state = { url: '', loading: false };
+  var toastTimer = null;
+
+  function showToast(msg, ms) {
+    var el = $('toast'); if (!el) return;
+    el.textContent = msg;
+    el.style.display = 'block';
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(function () { el.style.display = 'none'; }, ms || 15000);
+  }
+  function setLoading(on) {
+    state.loading = on;
+    var btn = $('checkBtn');
+    btn.disabled = on;
+    btn.textContent = on ? 'Memeriksa...' : 'Cek tautan';
+  }
+  function showError(msg) {
+    var box = $('errorBox');
+    if (!msg) { box.style.display = 'none'; box.textContent = ''; return; }
+    box.textContent = msg;
+    box.style.display = 'block';
+  }
+  function showResult(html) {
+    var box = $('resultBox');
+    if (!html) { box.style.display = 'none'; box.innerHTML = ''; return; }
+    box.innerHTML = html;
+    box.style.display = 'block';
+  }
+
+  async function checkUrl() {
+    var url = $('u').value.trim();
+    showError('');
+    showResult('');
+    if (!url) return showError('Masukkan tautan terlebih dahulu.');
+    if (!/^https?:\/\//i.test(url)) return showError('Tautan harus diawali http:// atau https://');
+    state.url = url;
+    setLoading(true);
+    try {
+      var controller = new AbortController();
+      var timer = setTimeout(function () { controller.abort(); }, 90000);
+      var res = await fetch('/api/resolve', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ url: url }),
+        signal: controller.signal
+      });
+      clearTimeout(timer);
+      var data = await res.json().catch(function () { return {}; });
+      if (!data.status) throw new Error(data.error || ('Gagal (HTTP ' + res.status + ')'));
+      renderResult(data.result);
+    } catch (e) {
+      showError(e.name === 'AbortError' ? 'Waktu habis. Coba lagi.' : (e.message || 'Gagal mengambil data.'));
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  function renderResult(media) {
+    if (!media) return showError('Tidak ada data.');
+    var formats = (media.formats || []).filter(function (f) {
+      return f.downloadUrl && f.downloadUrl !== 'all-slides' && f.downloadUrl !== 'all-playlist';
+    });
+    var slides = media.slides || [];
+    if (!formats.length && !slides.length) return showError('Tidak ada format yang bisa diunduh dari tautan ini.');
+
+    var thumb = media.thumbnailUrl
+      ? '<img src="' + esc(media.thumbnailUrl) + '" alt="" style="width:120px;height:88px;object-fit:cover;border-radius:12px;background:#232838;flex-shrink:0" onerror="this.style.display=\'none\'">'
+      : '';
+    var meta = [media.platform, media.author].filter(Boolean).map(esc).join(' · ');
+    var formatBtns = formats.map(function (f) {
+      var label = f.quality || f.label || f.id;
+      var ext = f.ext || 'mp4';
+      return '<button type="button" class="btn" data-fmt="' + esc(f.id) + '" style="background:var(--mint);color:var(--ink);min-height:44px;padding:0 18px;font-size:14px">' + esc(label) + ' · ' + esc(ext) + '</button>';
+    }).join('');
+    var slidesBtn = slides.length
+      ? '<button type="button" class="btn" data-fmt="all-slides" style="background:var(--accent);color:#fff;min-height:44px;padding:0 18px;font-size:14px">ZIP · ' + slides.length + ' slide</button>'
+      : '';
+
+    showResult(
+      '<div style="background:#171A23;border:1px solid #2E3340;border-radius:20px;padding:18px;display:flex;flex-direction:column;gap:16px">' +
+        '<div style="display:flex;gap:14px;align-items:center">' + thumb +
+          '<div style="flex:1;min-width:0">' +
+            (meta ? '<div style="font-size:12px;color:#9AA0B2;margin-bottom:4px">' + meta + '</div>' : '') +
+            '<b style="display:block;font-size:16px;line-height:1.3;word-break:break-word">' + esc(media.title || 'Tanpa judul') + '</b>' +
+            '<div style="font-size:13px;color:#9AA0B2;margin-top:4px">' + formats.length + ' format' + (slides.length ? ' · ' + slides.length + ' slide' : '') + '</div>' +
+          '</div>' +
+        '</div>' +
+        '<div style="display:flex;flex-wrap:wrap;gap:10px">' + formatBtns + slidesBtn + '</div>' +
+        '<div style="font-size:12px;color:#9AA0B2">Klik format untuk mengunduh. Proses bisa 10–30 detik.</div>' +
+      '</div>'
+    );
+
+    var nodes = document.querySelectorAll('#resultBox [data-fmt]');
+    for (var i = 0; i < nodes.length; i++) {
+      (function (btn) {
+        btn.addEventListener('click', function () { triggerDownload(btn.dataset.fmt); });
+      })(nodes[i]);
+    }
+  }
+
+  function triggerDownload(formatId) {
+    if (!state.url) return;
+    showToast('⏳ Menyiapkan unduhan...');
+    var iframe = document.createElement('iframe');
+    iframe.style.display = 'none';
+    iframe.src = '/api/download?url=' + encodeURIComponent(state.url) + '&formatId=' + encodeURIComponent(formatId);
+    document.body.appendChild(iframe);
+    setTimeout(function () { iframe.remove(); }, 300000);
+  }
+
+  $('checkBtn').addEventListener('click', checkUrl);
+  $('u').addEventListener('keydown', function (e) {
+    if (e.key === 'Enter') { e.preventDefault(); checkUrl(); }
+  });
+})();
+</script>
+</body>
+</html>
