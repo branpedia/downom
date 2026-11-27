@@ -220,14 +220,54 @@ html{background:var(--ink)}
     }
   }
 
-  function triggerDownload(formatId) {
-    if (!state.url) return;
-    showToast('⏳ Menyiapkan unduhan...');
-    var iframe = document.createElement('iframe');
-    iframe.style.display = 'none';
-    iframe.src = '/api/download?url=' + encodeURIComponent(state.url) + '&formatId=' + encodeURIComponent(formatId);
-    document.body.appendChild(iframe);
-    setTimeout(function () { iframe.remove(); }, 300000);
+  var downloading = false;
+
+  function filenameFromHeader(cd) {
+    if (!cd) return '';
+    var m = /filename\*=UTF-8''([^;]+)/i.exec(cd);
+    if (m) { try { return decodeURIComponent(m[1]); } catch (e) {} }
+    m = /filename="?([^";]+)"?/i.exec(cd);
+    return m ? m[1] : '';
+  }
+
+  async function triggerDownload(formatId) {
+    if (!state.url || downloading) return;
+    downloading = true;
+    var startedAt = Date.now();
+    var ticker = setInterval(function () {
+      showToast('⏳ Menyiapkan unduhan... ' + Math.floor((Date.now() - startedAt) / 1000) + ' dtk', 600000);
+    }, 1000);
+    showToast('⏳ Menyiapkan unduhan...', 600000);
+    showError('');
+    var controller = new AbortController();
+    var timer = setTimeout(function () { controller.abort(); }, 180000);
+    try {
+      var res = await fetch('/api/download?url=' + encodeURIComponent(state.url) + '&formatId=' + encodeURIComponent(formatId), {
+        signal: controller.signal
+      });
+      if (!res.ok) {
+        var err = await res.json().catch(function () { return {}; });
+        throw new Error(err.error || ('Gagal mengunduh (HTTP ' + res.status + ')'));
+      }
+      var blob = await res.blob();
+      var name = filenameFromHeader(res.headers.get('Content-Disposition')) || 'unduhan';
+      var a = document.createElement('a');
+      var href = URL.createObjectURL(blob);
+      a.href = href;
+      a.download = name;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      setTimeout(function () { URL.revokeObjectURL(href); }, 60000);
+      showToast('✅ Selesai: ' + name, 6000);
+    } catch (e) {
+      $('toast').style.display = 'none';
+      showError(e.name === 'AbortError' ? 'Waktu habis saat menyiapkan unduhan. Coba lagi.' : (e.message || 'Gagal mengunduh.'));
+    } finally {
+      clearInterval(ticker);
+      clearTimeout(timer);
+      downloading = false;
+    }
   }
 
   $('checkBtn').addEventListener('click', checkUrl);
